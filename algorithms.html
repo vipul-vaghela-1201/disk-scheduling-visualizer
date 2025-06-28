@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disk Scheduling Algorithms Explained</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Disk Scheduling Algorithms Explained</h1>
+        <nav>
+            <a href="index.html">Visualizer</a>
+            <a href="algorithms.html" class="active">Algorithm Explanations</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="algorithm-tabs">
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="fcfs">FCFS</button>
+                <button class="tab-btn" data-tab="sstf">SSTF</button>
+                <button class="tab-btn" data-tab="scan">SCAN</button>
+                <button class="tab-btn" data-tab="look">LOOK</button>
+                <button class="tab-btn" data-tab="cscan">C-SCAN</button>
+                <button class="tab-btn" data-tab="clook">C-LOOK</button>
+            </div>
+
+            <!-- FCFS Tab Content-->
+            <div class="tab-content active" id="fcfs">
+                <div class="algorithm-header">
+                    <h2><i class="fas fa-list-ol"></i> FCFS (First Come First Serve)</h2>
+                    <div class="algorithm-meta">
+                        <span class="difficulty easy"><i class="fas fa-battery-full"></i> Easy</span>
+                        <span class="efficiency low"><i class="fas fa-tachometer-alt"></i> Low Efficiency</span>
+                    </div>
+                </div>
+                
+                <div class="algorithm-visual">
+                    <div class="visual-example">
+                        <div class="track-visual">
+                            <div class="head-start" style="left: 26.5%;">Start (53)</div>
+                            <div class="track-line"></div>
+                            <div class="request" style="left: 10%;">37</div>
+                            <div class="request" style="left: 7%;">14</div>
+                            <div class="request" style="left: 49%;">98</div>
+                            <div class="request" style="left: 61%;">122</div>
+                            <div class="request" style="left: 62%;">124</div>
+                            <div class="request" style="left: 32.5%;">65</div>
+                            <div class="request" style="left: 33.5%;">67</div>
+                            <div class="request" style="left: 91.5%;">183</div>
+                            <div class="seek-path"></div>
+                        </div>
+                        <div class="visual-legend">
+                            <div><span class="legend-color start"></span> Head Start</div>
+                            <div><span class="legend-color request"></span> Request</div>
+                            <div><span class="legend-color path"></span> Seek Path</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-details">
+                    <div class="detail-box">
+                        <h3><i class="fas fa-info-circle"></i> Description</h3>
+                        <p>The simplest disk scheduling algorithm that services requests in the order they arrive in the queue.</p>
+                        <p>Like a first-come-first-served queue at a ticket counter, it processes requests in their arrival order without any prioritization.</p>
+                    </div>
+
+                    <div class="detail-box">
+                        <h3><i class="fas fa-cogs"></i> How It Works</h3>
+                        <ol>
+                            <li>The disk head starts at its initial position</li>
+                            <li>Moves to the first request in the queue</li>
+                            <li>Then moves to the next request in the order they arrived</li>
+                            <li>Continues until all requests are serviced</li>
+                        </ol>
+                    </div>
+
+                    <div class="detail-box pros-cons">
+                        <div class="pros">
+                            <h3><i class="fas fa-thumbs-up"></i> Advantages</h3>
+                            <ul>
+                                <li><strong>Simple</strong> to understand and implement</li>
+                                <li><strong>No starvation</strong> - every request gets serviced</li>
+                                <li><strong>Fair</strong> to all requests</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h3><i class="fas fa-thumbs-down"></i> Disadvantages</h3>
+                            <ul>
+                                <li><strong>Poor performance</strong> in terms of total seek time</li>
+                                <li>Doesn't take advantage of <strong>locality of reference</strong></li>
+                                <li>Can result in <strong>wild swings</strong> of the disk arm</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="detail-box example">
+                        <h3><i class="fas fa-laptop-code"></i> Example</h3>
+                        <div class="example-details">
+                            <p><strong>Requests:</strong> 98, 183, 37, 122, 14, 124, 65, 67</p>
+                            <p><strong>Head starts at:</strong> 53</p>
+                            <p><strong>Order:</strong> 53 → 98 → 183 → 37 → 122 → 14 → 124 → 65 → 67</p>
+                            <p><strong>Total seek distance:</strong> 640 cylinders</p>
+                        </div>
+                        <div class="complexity">
+                            <h4>Performance Characteristics:</h4>
+                            <p><strong>Time Complexity:</strong> O(n)</p>
+                            <p><strong>Space Complexity:</strong> O(1)</p>
+                            <p><strong>Average Seek Time:</strong> High (depends on request order)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SSTF Tab Content -->
+            <div class="tab-content" id="sstf">
+                <div class="algorithm-header">
+                    <h2><i class="fas fa-bullseye"></i> SSTF (Shortest Seek Time First)</h2>
+                    <div class="algorithm-meta">
+                        <span class="difficulty medium"><i class="fas fa-battery-three-quarters"></i> Medium</span>
+                        <span class="efficiency medium"><i class="fas fa-tachometer-alt"></i> Medium Efficiency</span>
+                    </div>
+                </div>
+                
+                <div class="algorithm-visual">
+                    <div class="visual-example">
+                        <div class="track-visual">
+                            <div class="head-start" style="left: 26.5%;">Start (53)</div>
+                            <div class="track-line"></div>
+                            <div class="request" style="left: 10%;">37</div>
+                            <div class="request" style="left: 7%;">14</div>
+                            <div class="request" style="left: 49%;">98</div>
+                            <div class="request" style="left: 61%;">122</div>
+                            <div class="request" style="left: 62%;">124</div>
+                            <div class="request" style="left: 32.5%;">65</div>
+                            <div class="request" style="left: 33.5%;">67</div>
+                            <div class="request" style="left: 91.5%;">183</div>
+                            <div class="seek-path sstf-path"></div>
+                        </div>
+                        <div class="visual-legend">
+                            <div><span class="legend-color start"></span> Head Start</div>
+                            <div><span class="legend-color request"></span> Request</div>
+                            <div><span class="legend-color path"></span> Seek Path</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-details">
+                    <div class="detail-box">
+                        <h3><i class="fas fa-info-circle"></i> Description</h3>
+                        <p>Selects the request with the minimum seek time from the current head position, minimizing overall seek time.</p>
+                        <p>Similar to how an efficient waiter might serve tables closest to their current position first.</p>
+                    </div>
+
+                    <div class="detail-box">
+                        <h3><i class="fas fa-cogs"></i> How It Works</h3>
+                        <ol>
+                            <li>The disk head starts at its initial position</li>
+                            <li>Calculates seek distance to all pending requests</li>
+                            <li>Selects the request with the shortest seek time</li>
+                            <li>Moves to that request and services it</li>
+                            <li>Repeats the process until all requests are serviced</li>
+                        </ol>
+                    </div>
+
+                    <div class="detail-box pros-cons">
+                        <div class="pros">
+                            <h3><i class="fas fa-thumbs-up"></i> Advantages</h3>
+                            <ul>
+                                <li><strong>Reduces total seek time</strong> compared to FCFS</li>
+                                <li><strong>Better average response time</strong></li>
+                                <li>More <strong>efficient</strong> than FCFS</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h3><i class="fas fa-thumbs-down"></i> Disadvantages</h3>
+                            <ul>
+                                <li><strong>Starvation possible</strong> for requests far from head position</li>
+                                <li>Not guaranteed to have <strong>minimum seek time</strong></li>
+                                <li>Requires <strong>dynamic calculation</strong> at each step</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="detail-box example">
+                        <h3><i class="fas fa-laptop-code"></i> Example</h3>
+                        <div class="example-details">
+                            <p><strong>Requests:</strong> 98, 183, 37, 122, 14, 124, 65, 67</p>
+                            <p><strong>Head starts at:</strong> 53</p>
+                            <p><strong>Order:</strong> 53 → 65 → 67 → 37 → 14 → 98 → 122 → 124 → 183</p>
+                            <p><strong>Total seek distance:</strong> 236 cylinders</p>
+                        </div>
+                        <div class="complexity">
+                            <h4>Performance Characteristics:</h4>
+                            <p><strong>Time Complexity:</strong> O(n²)</p>
+                            <p><strong>Space Complexity:</strong> O(n)</p>
+                            <p><strong>Average Seek Time:</strong> Better than FCFS</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCAN Tab Content -->
+            <div class="tab-content" id="scan">
+                <div class="algorithm-header">
+                    <h2><i class="fas fa-arrows-alt-h"></i> SCAN (Elevator Algorithm)</h2>
+                    <div class="algorithm-meta">
+                        <span class="difficulty medium"><i class="fas fa-battery-three-quarters"></i> Medium</span>
+                        <span class="efficiency high"><i class="fas fa-tachometer-alt"></i> High Efficiency</span>
+                    </div>
+                </div>
+                
+                <div class="algorithm-visual">
+                    <div class="visual-example">
+                        <div class="track-visual">
+                            <div class="head-start" style="left: 26.5%;">Start (53)</div>
+                            <div class="track-line"></div>
+                            <div class="request" style="left: 10%;">37</div>
+                            <div class="request" style="left: 7%;">14</div>
+                            <div class="request" style="left: 49%;">98</div>
+                            <div class="request" style="left: 61%;">122</div>
+                            <div class="request" style="left: 62%;">124</div>
+                            <div class="request" style="left: 32.5%;">65</div>
+                            <div class="request" style="left: 33.5%;">67</div>
+                            <div class="request" style="left: 91.5%;">183</div>
+                            <div class="seek-path scan-path"></div>
+                        </div>
+                        <div class="visual-legend">
+                            <div><span class="legend-color start"></span> Head Start</div>
+                            <div><span class="legend-color request"></span> Request</div>
+                            <div><span class="legend-color path"></span> Seek Path</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-details">
+                    <div class="detail-box">
+                        <h3><i class="fas fa-info-circle"></i> Description</h3>
+                        <p>The disk arm starts at one end of the disk and moves toward the other end, servicing requests as it goes.</p>
+                        <p>Like an elevator moving from the ground floor to the top floor, stopping at requested floors along the way.</p>
+                    </div>
+
+                    <div class="detail-box">
+                        <h3><i class="fas fa-cogs"></i> How It Works</h3>
+                        <ol>
+                            <li>The disk head starts at initial position with a direction (left or right)</li>
+                            <li>Moves in that direction servicing all requests encountered</li>
+                            <li>When it reaches the end of the disk (0 or max track), it reverses direction</li>
+                            <li>Services requests while moving in the opposite direction</li>
+                            <li>Continues this back-and-forth movement</li>
+                        </ol>
+                    </div>
+
+                    <div class="detail-box pros-cons">
+                        <div class="pros">
+                            <h3><i class="fas fa-thumbs-up"></i> Advantages</h3>
+                            <ul>
+                                <li><strong>No starvation</strong> - all requests eventually serviced</li>
+                                <li><strong>Better performance</strong> than FCFS/SSTF for heavy loads</li>
+                                <li><strong>Predictable</strong> service pattern</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h3><i class="fas fa-thumbs-down"></i> Disadvantages</h3>
+                            <ul>
+                                <li><strong>Long wait time</strong> for requests just visited by the head</li>
+                                <li>Not most efficient for <strong>light loads</strong></li>
+                                <li>May do <strong>unnecessary seeks</strong> to disk ends</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="detail-box example">
+                        <h3><i class="fas fa-laptop-code"></i> Example</h3>
+                        <div class="example-details">
+                            <p><strong>Requests:</strong> 98, 183, 37, 122, 14, 124, 65, 67</p>
+                            <p><strong>Head starts at:</strong> 53 (moving left)</p>
+                            <p><strong>Order:</strong> 53 → 37 → 14 → 0 → 65 → 67 → 98 → 122 → 124 → 183</p>
+                            <p><strong>Total seek distance:</strong> 236 cylinders</p>
+                        </div>
+                        <div class="complexity">
+                            <h4>Performance Characteristics:</h4>
+                            <p><strong>Time Complexity:</strong> O(n log n) for sorting</p>
+                            <p><strong>Space Complexity:</strong> O(n)</p>
+                            <p><strong>Average Seek Time:</strong> Good for heavy loads</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOOK Tab Content -->
+            <div class="tab-content" id="look">
+                <div class="algorithm-header">
+                    <h2><i class="fas fa-search"></i> LOOK</h2>
+                    <div class="algorithm-meta">
+                        <span class="difficulty medium"><i class="fas fa-battery-three-quarters"></i> Medium</span>
+                        <span class="efficiency high"><i class="fas fa-tachometer-alt"></i> High Efficiency</span>
+                    </div>
+                </div>
+                
+                <div class="algorithm-visual">
+                    <div class="visual-example">
+                        <div class="track-visual">
+                            <div class="head-start" style="left: 26.5%;">Start (53)</div>
+                            <div class="track-line"></div>
+                            <div class="request" style="left: 10%;">37</div>
+                            <div class="request" style="left: 7%;">14</div>
+                            <div class="request" style="left: 49%;">98</div>
+                            <div class="request" style="left: 61%;">122</div>
+                            <div class="request" style="left: 62%;">124</div>
+                            <div class="request" style="left: 32.5%;">65</div>
+                            <div class="request" style="left: 33.5%;">67</div>
+                            <div class="request" style="left: 91.5%;">183</div>
+                            <div class="seek-path look-path"></div>
+                        </div>
+                        <div class="visual-legend">
+                            <div><span class="legend-color start"></span> Head Start</div>
+                            <div><span class="legend-color request"></span> Request</div>
+                            <div><span class="legend-color path"></span> Seek Path</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-details">
+                    <div class="detail-box">
+                        <h3><i class="fas fa-info-circle"></i> Description</h3>
+                        <p>Similar to SCAN but the arm only goes as far as the last request in each direction, making it more efficient.</p>
+                        <p>Like an elevator that only goes as high as the highest requested floor and as low as the lowest requested floor.</p>
+                    </div>
+
+                    <div class="detail-box">
+                        <h3><i class="fas fa-cogs"></i> How It Works</h3>
+                        <ol>
+                            <li>The disk head starts at initial position with a direction (left or right)</li>
+                            <li>Moves in that direction servicing all requests encountered</li>
+                            <li>When it reaches the last request in that direction, it reverses direction</li>
+                            <li>Services requests while moving in the opposite direction</li>
+                            <li>Doesn't go to the end of disk unless there are requests there</li>
+                        </ol>
+                    </div>
+
+                    <div class="detail-box pros-cons">
+                        <div class="pros">
+                            <h3><i class="fas fa-thumbs-up"></i> Advantages</h3>
+                            <ul>
+                                <li><strong>Reduces unnecessary movement</strong> compared to SCAN</li>
+                                <li><strong>No starvation</strong> - all requests eventually serviced</li>
+                                <li><strong>More efficient</strong> than SCAN in most cases</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h3><i class="fas fa-thumbs-down"></i> Disadvantages</h3>
+                            <ul>
+                                <li>Slightly more <strong>complex to implement</strong> than SCAN</li>
+                                <li>Still has <strong>variable wait times</strong> depending on direction</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="detail-box example">
+                        <h3><i class="fas fa-laptop-code"></i> Example</h3>
+                        <div class="example-details">
+                            <p><strong>Requests:</strong> 98, 183, 37, 122, 14, 124, 65, 67</p>
+                            <p><strong>Head starts at:</strong> 53 (moving left)</p>
+                            <p><strong>Order:</strong> 53 → 37 → 14 → 65 → 67 → 98 → 122 → 124 → 183</p>
+                            <p><strong>Total seek distance:</strong> 299 cylinders</p>
+                        </div>
+                        <div class="complexity">
+                            <h4>Performance Characteristics:</h4>
+                            <p><strong>Time Complexity:</strong> O(n log n) for sorting</p>
+                            <p><strong>Space Complexity:</strong> O(n)</p>
+                            <p><strong>Average Seek Time:</strong> Better than SCAN</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- C-SCAN Tab Content -->
+            <div class="tab-content" id="cscan">
+                <div class="algorithm-header">
+                    <h2><i class="fas fa-redo"></i> C-SCAN (Circular SCAN)</h2>
+                    <div class="algorithm-meta">
+                        <span class="difficulty medium"><i class="fas fa-battery-three-quarters"></i> Medium</span>
+                        <span class="efficiency high"><i class="fas fa-tachometer-alt"></i> High Efficiency</span>
+                    </div>
+                </div>
+                
+                <div class="algorithm-visual">
+                    <div class="visual-example">
+                        <div class="track-visual">
+                            <div class="head-start" style="left: 26.5%;">Start (53)</div>
+                            <div class="track-line"></div>
+                            <div class="request" style="left: 10%;">37</div>
+                            <div class="request" style="left: 7%;">14</div>
+                            <div class="request" style="left: 49%;">98</div>
+                            <div class="request" style="left: 61%;">122</div>
+                            <div class="request" style="left: 62%;">124</div>
+                            <div class="request" style="left: 32.5%;">65</div>
+                            <div class="request" style="left: 33.5%;">67</div>
+                            <div class="request" style="left: 91.5%;">183</div>
+                            <div class="seek-path cscan-path"></div>
+                        </div>
+                        <div class="visual-legend">
+                            <div><span class="legend-color start"></span> Head Start</div>
+                            <div><span class="legend-color request"></span> Request</div>
+                            <div><span class="legend-color path"></span> Seek Path</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-details">
+                    <div class="detail-box">
+                        <h3><i class="fas fa-info-circle"></i> Description</h3>
+                        <p>Services requests in one direction and quickly returns to the beginning to service more requests, providing more uniform wait time.</p>
+                        <p>Like a circular shuttle bus that goes in one direction and then quickly returns to the start point.</p>
+                    </div>
+
+                    <div class="detail-box">
+                        <h3><i class="fas fa-cogs"></i> How It Works</h3>
+                        <ol>
+                            <li>The disk head starts at initial position with a direction (typically right)</li>
+                            <li>Moves in that direction servicing all requests encountered</li>
+                            <li>When it reaches the end of the disk, it jumps to the opposite end</li>
+                            <li>Continues servicing requests in the same direction</li>
+                            <li>Doesn't service requests during the return jump</li>
+                        </ol>
+                    </div>
+
+                    <div class="detail-box pros-cons">
+                        <div class="pros">
+                            <h3><i class="fas fa-thumbs-up"></i> Advantages</h3>
+                            <ul>
+                                <li><strong>More uniform wait time</strong> than SCAN</li>
+                                <li><strong>Good for systems</strong> with many requests</li>
+                                <li><strong>Predictable</strong> service pattern</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h3><i class="fas fa-thumbs-down"></i> Disadvantages</h3>
+                            <ul>
+                                <li><strong>Wastes time</strong> by moving to the end when not needed</li>
+                                <li>Longer <strong>average response time</strong> than LOOK</li>
+                                <li>Doesn't service requests during <strong>return jump</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="detail-box example">
+                        <h3><i class="fas fa-laptop-code"></i> Example</h3>
+                        <div class="example-details">
+                            <p><strong>Requests:</strong> 98, 183, 37, 122, 14, 124, 65, 67</p>
+                            <p><strong>Head starts at:</strong> 53 (moving right)</p>
+                            <p><strong>Order:</strong> 53 → 65 → 67 → 98 → 122 → 124 → 183 → 200 → 0 → 14 → 37</p>
+                            <p><strong>Total seek distance:</strong> 382 cylinders</p>
+                        </div>
+                        <div class="complexity">
+                            <h4>Performance Characteristics:</h4>
+                            <p><strong>Time Complexity:</strong> O(n log n) for sorting</p>
+                            <p><strong>Space Complexity:</strong> O(n)</p>
+                            <p><strong>Average Seek Time:</strong> Good for uniform access</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- C-LOOK Tab Content -->
+            <div class="tab-content" id="clook">
+                <div class="algorithm-header">
+                    <h2><i class="fas fa-redo-alt"></i> C-LOOK</h2>
+                    <div class="algorithm-meta">
+                        <span class="difficulty medium"><i class="fas fa-battery-three-quarters"></i> Medium</span>
+                        <span class="efficiency high"><i class="fas fa-tachometer-alt"></i> High Efficiency</span>
+                    </div>
+                </div>
+                
+                <div class="algorithm-visual">
+                    <div class="visual-example">
+                        <div class="track-visual">
+                            <div class="head-start" style="left: 26.5%;">Start (53)</div>
+                            <div class="track-line"></div>
+                            <div class="request" style="left: 10%;">37</div>
+                            <div class="request" style="left: 7%;">14</div>
+                            <div class="request" style="left: 49%;">98</div>
+                            <div class="request" style="left: 61%;">122</div>
+                            <div class="request" style="left: 62%;">124</div>
+                            <div class="request" style="left: 32.5%;">65</div>
+                            <div class="request" style="left: 33.5%;">67</div>
+                            <div class="request" style="left: 91.5%;">183</div>
+                            <div class="seek-path clook-path"></div>
+                        </div>
+                        <div class="visual-legend">
+                            <div><span class="legend-color start"></span> Head Start</div>
+                            <div><span class="legend-color request"></span> Request</div>
+                            <div><span class="legend-color path"></span> Seek Path</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-details">
+                    <div class="detail-box">
+                        <h3><i class="fas fa-info-circle"></i> Description</h3>
+                        <p>Variant of C-SCAN that only goes as far as the last request in each direction, making it more efficient.</p>
+                        <p>Like a modified elevator that only goes as high as needed and then jumps back to the lowest requested floor.</p>
+                    </div>
+
+                    <div class="detail-box">
+                        <h3><i class="fas fa-cogs"></i> How It Works</h3>
+                        <ol>
+                            <li>The disk head starts at initial position with a direction (typically right)</li>
+                            <li>Moves in that direction servicing all requests encountered</li>
+                            <li>When it reaches the last request in that direction, it jumps to the first request in the opposite direction</li>
+                            <li>Continues servicing requests in the same direction</li>
+                            <li>Doesn't go to the end of disk unless there are requests there</li>
+                        </ol>
+                    </div>
+
+                    <div class="detail-box pros-cons">
+                        <div class="pros">
+                            <h3><i class="fas fa-thumbs-up"></i> Advantages</h3>
+                            <ul>
+                                <li><strong>More efficient</strong> than C-SCAN</li>
+                                <li><strong>Uniform wait time</strong> like C-SCAN</li>
+                                <li><strong>Reduces unnecessary</strong> disk arm movement</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h3><i class="fas fa-thumbs-down"></i> Disadvantages</h3>
+                            <ul>
+                                <li>Slightly more <strong>complex to implement</strong> than C-SCAN</li>
+                                <li>Still has <strong>jump overhead</strong> like C-SCAN</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="detail-box example">
+                        <h3><i class="fas fa-laptop-code"></i> Example</h3>
+                        <div class="example-details">
+                            <p><strong>Requests:</strong> 98, 183, 37, 122, 14, 124, 65, 67</p>
+                            <p><strong>Head starts at:</strong> 53 (moving right)</p>
+                            <p><strong>Order:</strong> 53 → 65 → 67 → 98 → 122 → 124 → 183 → 14 → 37</p>
+                            <p><strong>Total seek distance:</strong> 322 cylinders</p>
+                        </div>
+                        <div class="complexity">
+                            <h4>Performance Characteristics:</h4>
+                            <p><strong>Time Complexity:</strong> O(n log n) for sorting</p>
+                            <p><strong>Space Complexity:</strong> O(n)</p>
+                            <p><strong>Average Seek Time:</strong> Best among SCAN variants</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <!-- Rest of the file remains the same -->
+            
+        </section>
+    </main>
+
+    <footer>
+        <p>Disk Scheduling Algorithm Visualizer - Educational Tool</p>
+    </footer>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    button.classList.add('active');
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💾</text></svg>">
+    <title>Disk Scheduling Algorithm Visualizer</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Disk Scheduling Algorithm Visualizer</h1>
+        <nav>
+            <a href="index.html" class="active">Visualizer</a>
+            <a href="algorithms.html">Algorithm Explanations</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="input-section">
+            <div class="input-group">
+                <label for="requests">Request Queue (comma separated):</label>
+                <input type="text" id="requests" value="98, 183, 37, 122, 14, 124, 65, 67">
+            </div>
+            <div class="input-group">
+                <label for="head">Initial Head Position:</label>
+                <input type="number" id="head" value="53">
+            </div>
+            <div class="input-group">
+                <label for="direction">Direction (for SCAN/LOOK):</label>
+                <select id="direction">
+                    <option value="left">Left (Decreasing)</option>
+                    <option value="right">Right (Increasing)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="algorithm">Algorithm:</label>
+                <select id="algorithm">
+                    <option value="fcfs">FCFS (First Come First Serve)</option>
+                    <option value="sstf">SSTF (Shortest Seek Time First)</option>
+                    <option value="scan">SCAN (Elevator)</option>
+                    <option value="look">LOOK</option>
+                    <option value="cscan">C-SCAN (Circular SCAN)</option>
+                    <option value="clook">C-LOOK</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="max-track">Max Track Number:</label>
+                <input type="number" id="max-track" value="200">
+            </div>
+            <button id="visualize-btn">Visualize</button>
+        </section>
+
+        <section class="results-section">
+            <div class="chart-container">
+                <canvas id="seekChart"></canvas>
+            </div>
+            <div class="stats-container">
+                <h3>Algorithm Results</h3>
+                <div id="seek-sequence"></div>
+                <div id="total-seek"></div>
+                <div id="avg-seek"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Disk Scheduling Algorithm Visualizer - Educational Tool</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
